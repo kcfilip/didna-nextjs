@@ -1,6 +1,6 @@
 .adSlot {
   max-width: 800px;
-  height: 150px;
+  min-height: 150px;
   background: #ccc;
   padding: 20px;
   margin: 40px;
