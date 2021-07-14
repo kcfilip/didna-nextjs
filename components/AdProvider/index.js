@@ -52,28 +52,11 @@ const didnaInit = new Promise((resolve, reject) => {
   check();
 });
 
-const destroyAllAds = () => {
-  didnaInit.then((didna) => {
-    console.log(window.didna);
-    window.didna.cmd.push(() => {
-      window.didna.removeAdUnits([
-        "site-leaderboard",
-        "below-post",
-        "right-rail",
-        "in-content-0",
-        "in-content-1",
-      ]);
-    });
-  });
-};
-
 const createAds = (adList) => {
   const commands = [];
   adList.forEach((id) => {
     commands.push(ADS_DEF[id]);
   });
-
-  console.log(commands);
 
   didnaInit.then((didna) => {
     window.didna.cmd.push(() => {
@@ -82,10 +65,23 @@ const createAds = (adList) => {
   });
 };
 
+const destroyAds = (adList) => {
+  didnaInit.then((didna) => {
+    window.didna.cmd.push(() => {
+      window.didna.removeAdUnits(adList);
+    });
+  });
+};
+
 const AdProvider = ({ adList, children }) => {
   useEffect(() => {
-    destroyAllAds();
+    console.log("--- Page landed, creating ads: " + adList.join(", "));
     createAds(adList);
+
+    return () => {
+      console.log("--- Leaving page, destroying ads: " + adList.join(", "));
+      destroyAds(adList);
+    };
   }, [adList]);
 
   return <>{children}</>;

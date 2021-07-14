@@ -67,11 +67,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <script
-          async
-          type="text/javascript"
-          src="https://storage.googleapis.com/didna_hb/the_infatuation_inc/theinfatuation/didna_config.js"
-        ></script>
+        <script async type="text/javascript" src="/didna-config.js"></script>
       </Head>
       <Component {...pageProps} />
     </>
