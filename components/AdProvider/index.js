@@ -39,7 +39,10 @@ const didnaInit = new Promise((resolve, reject) => {
 
   function check() {
     if (typeof window === "undefined") {
-      return check();
+      timer = setTimeout(() => {
+        check();
+      }, 50);
+      return;
     }
     if (!window.didna) {
       countRetry++;
@@ -61,23 +64,19 @@ const createAds = (adList) => {
     commands.push(ADS_DEF[id]);
   });
 
-  didnaInit
-    .then((didna) => {
-      window.didna.cmd.push(() => {
-        window.didna.createAdUnits(commands);
-      });
-    })
-    .catch((err) => console.log(err));
+  didnaInit.then((didna) => {
+    window.didna.cmd.push(() => {
+      window.didna.createAdUnits(commands);
+    });
+  });
 };
 
 const destroyAds = (adList) => {
-  didnaInit
-    .then((didna) => {
-      window.didna.cmd.push(() => {
-        window.didna.removeAdUnits(adList);
-      });
-    })
-    .catch((err) => console.log(err));
+  didnaInit.then((didna) => {
+    window.didna.cmd.push(() => {
+      window.didna.removeAdUnits(adList);
+    });
+  });
 };
 
 const AdProvider = ({ adList, children }) => {
