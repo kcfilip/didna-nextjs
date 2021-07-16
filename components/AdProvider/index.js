@@ -38,6 +38,9 @@ const didnaInit = new Promise((resolve, reject) => {
   let countRetry = 0;
 
   function check() {
+    if (typeof window === "undefined") {
+      return check();
+    }
     if (!window.didna) {
       countRetry++;
       timer = setTimeout(() => {
@@ -58,19 +61,23 @@ const createAds = (adList) => {
     commands.push(ADS_DEF[id]);
   });
 
-  didnaInit.then((didna) => {
-    window.didna.cmd.push(() => {
-      window.didna.createAdUnits(commands);
-    });
-  });
+  didnaInit
+    .then((didna) => {
+      window.didna.cmd.push(() => {
+        window.didna.createAdUnits(commands);
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 const destroyAds = (adList) => {
-  didnaInit.then((didna) => {
-    window.didna.cmd.push(() => {
-      window.didna.removeAdUnits(adList);
-    });
-  });
+  didnaInit
+    .then((didna) => {
+      window.didna.cmd.push(() => {
+        window.didna.removeAdUnits(adList);
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 const AdProvider = ({ adList, children }) => {
